@@ -7,7 +7,7 @@ Il progetto consiste nello sviluppo in OpenGL/GLUT di un labirinto nel quale il 
 Nello specifico dell'applicativo si farà uso delle Luci (Ambient, Spotted , etc..),e si rivestirà il tutto di Textures.
 I tempi previsti per lo sviluppo sono di circa 2 settimane (salvo imprevisti), suddivisi in brainstorming, progettazione, coding e testing.
 
-#Features
+#Features ( Italian )
 Oltre al labirinto , si cercherà di implementare alcuni Mob i quali attacheranno il giocatore nelle vicinanze tentado di uccidervi.
 Il giocatore per difendersi dai nemici sarà provvisto di un'arma la quale però ha un periodo di ricarica abbastanza lungo, pertanto generalemente sarà meglio scappare che attaccare.  
 
