@@ -51,19 +51,11 @@ void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(0.1, 0.1, 1.0);
 
-	//resetCoordinate();
-
-	/*QUADRATO*/
-	//gluLookAt(Co[0].x, Co[0].y, Co[0].z, Co[1].x+Co[0].x, Co[1].y+Co[0].y, Co[1].z+ Co[0].z, Co[2].x,
-		//	Co[2].y, Co[2].z);
 	glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 	gluLookAt(posx, posy, 1.5, posx + posfx, posy + posfy, 1.5, 0.0, 0.0, 1.0);
 
 	glPushMatrix();
-	//ruota su se stesso
-	//glRotatef(45, 0.0, 0.0, 1.0);
-	//glTranslatef(-16.0, -16.0, 0.0);
 
 
 	displayPav();

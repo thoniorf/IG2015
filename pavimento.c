@@ -10,11 +10,11 @@
 #include <GL/gl.h>
 #include <math.h>
 
-unsigned int DimGrigliaX = 8; //dimensione della griglia x
+/*unsigned int DimGrigliaX = 8; //dimensione della griglia x
 unsigned int DimGrigliaY = 8; //dimensione della griglia y
 unsigned int X = 4; //misura x
 unsigned int Y = 4; //misura y
-
+*/
 
 
 struct Muro
@@ -43,20 +43,17 @@ void displayMura ()
 
 	int i,j;
 	glPushMatrix();
-	glTranslatef(5.0,5.0,0.0);
+	glTranslatef(2.5,2.5,0.0);
 	for(i=0; i<25; i++)	{
 
 		glPushMatrix();
 		for(j=0; j<25; j++)
 		{
-			//if(i==0 || i==dim-1 )
-			//{
-			glTranslatef(5.0,0.0,0.0);
+			if(Muro[i][j].e==1){
 				glColor3f(1.0f, 0.0f, 1.0f);
 				glutSolidCube(5);
-
-			//}
-
+				glTranslatef(5.0,0.0,0.0);
+			}
 		}
 
 		glPopMatrix();
@@ -67,26 +64,9 @@ void displayMura ()
 
 
 void displayPav() {
-	//unsigned int x, y;
 
-	//glPushMatrix();
-
-//pavimento
-/*	glBegin(GL_QUADS);
-	for (x = 0; x < DimGrigliaX; ++x) {
-		for (y = 0; y < DimGrigliaY; ++y) {
-			glColor3f(0.0f, 0.0f, 1.0f);
-			glVertex3f(x , y , 0);
-			glVertex3f(x + X, y, 0);
-			glVertex3f(x + X, y + Y, 0);
-			glVertex3f(x, y + Y, 0);
-			x+=X;
-
-		}
-		y+=Y;
-	}*/
 	glColor3f(0.1, 0.1, 1);
-	GLboolean odd = 0;
+
 	GLint n_quads = 25;
 	int i,j;
 	glPushMatrix();
