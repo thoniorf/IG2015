@@ -18,7 +18,8 @@ struct Cords
 	int value;
 }labyrint[width][height];
 
-void displayMura();
-void displayPav();
+void displayWall();
+void displayFloor();
+void displayRoof();
 
 #endif /* PAVIMENTO_H_ */
