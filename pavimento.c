@@ -11,7 +11,7 @@
 #include "pavimento.h"
 
 
-void displayMura() {
+void displayWall() {
 	glPushMatrix();
 	glTranslatef(2.5, 2.5, 0.0);
 	for (int i = 0; i < width; i++) {
@@ -32,11 +32,38 @@ void displayMura() {
 	glPopMatrix();
 }
 
-void displayPav() {
+void displayFloor() {
 
 	glColor3f(0.1, 0.1, 1);
 
 	glPushMatrix();
+	for (int i = 0; i < width; i++) {
+
+		glPushMatrix();
+		for (int j = 0; j < height; j++) {
+
+			glBegin(GL_QUADS);
+			glVertex2f(0.0, 0.0);
+			glVertex2f(5., 0.0);
+			glVertex2f(5., 5.);
+			glVertex2f(0.0, 5.);
+			glEnd();
+			glTranslatef(5., 0.0, 0.0);
+		}
+		glPopMatrix();
+		glTranslatef(0.0, 5., 0.0);
+	}
+
+	glPopMatrix();
+	glFlush();
+}
+
+void displayRoof() {
+
+	glColor3f(1, 0.52, 0.0);
+
+	glPushMatrix();
+	glTranslatef(0.0,0.0,2.5);
 	for (int i = 0; i < width; i++) {
 
 		glPushMatrix();

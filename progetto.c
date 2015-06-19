@@ -12,8 +12,8 @@
 
 static GLdouble pi = 3.14159;
 static GLdouble angle = 0.0;
-static GLdouble posx = 0.0;
-static GLdouble posy = 0.0;
+static GLdouble posx = 10.0;
+static GLdouble posy = 10.0;
 static GLdouble posfx = 1.0;
 static GLdouble posfy = 0.0;
 
@@ -22,21 +22,25 @@ void init(void) {
 	glShadeModel(GL_FLAT);
 	glEnable(GL_DEPTH_TEST);
 
-	int i, j;
-	for (i = 0; i < width; i++) {
-		for (j = 0; j < height; j++)
-			labyrint[i][j].x = 0;
-			labyrint[i][j].y = 0;
+	int x = 2.5,y = 2.5;
+	for (int i = 0; i < width; i++) {
+		for (int j = 0; j < height; j++) {
+			labyrint[i][j].x = x;
+			labyrint[i][j].y = y;
 			labyrint[i][j].value = 0;
+			x += 5;
+		}
+		y += 5;
 	}
-
-	for (i = 0; i < width; i++) {
+	// set perimeter
+	for (int i = 0; i < width; i++) {
 		labyrint[0][i].value = 1;
 		labyrint[24][i].value = 1;
 		labyrint[i][0].value = 1;
 		labyrint[i][24].value = 1;
 
 	}
+
 }
 
 void display(void) {
@@ -50,8 +54,9 @@ void display(void) {
 
 	glPushMatrix();
 
-	displayPav();
-	displayMura();
+	displayFloor();
+	displayRoof();
+	displayWall();
 	glPopMatrix();
 	glutSwapBuffers();
 }
@@ -78,11 +83,11 @@ void keyboard(unsigned char key, int x, int y) {
 		posfy = sin((angle * pi) / 180);
 		break;
 	case 'w':
-		posx = posx + cos((angle * pi) / 180);
-		posy = posy + sin((angle * pi) / 180);
+		posx = posx + cos((angle * pi) / 180);				// speed * cos -> change player walk speed
+		posy = posy + sin((angle * pi) / 180);				// the same as above with sin
 		break;
 	case 's':
-		posx = posx - cos((angle * pi) / 180);
+		posx = posx - cos((angle * pi) / 180);				// as for 'w'
 		posy = posy - sin((angle * pi) / 180);
 		break;
 	case 27:
@@ -104,6 +109,5 @@ int main(int argc, char** argv) {
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
 	glutMainLoop();
-	return 0;
 	return 0;
 }
