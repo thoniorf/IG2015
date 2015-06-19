@@ -8,6 +8,7 @@
 
 #include <GL/glut.h>
 #include <math.h>
+#include "pavimento.h"
 
 static GLdouble pi = 3.14159;
 static GLdouble angle = 0.0;
@@ -15,11 +16,6 @@ static GLdouble posx = 0.0;
 static GLdouble posy = 0.0;
 static GLdouble posfx = 1.0;
 static GLdouble posfy = 0.0;
-
-#define width 25
-#define height 25
-
-int labyrint[width][height];
 
 void init(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -29,14 +25,16 @@ void init(void) {
 	int i, j;
 	for (i = 0; i < width; i++) {
 		for (j = 0; j < height; j++)
-			labyrint[i][j] = 0;
+			labyrint[i][j].x = 0;
+			labyrint[i][j].y = 0;
+			labyrint[i][j].value = 0;
 	}
 
 	for (i = 0; i < width; i++) {
-		labyrint[0][i] = 1;
-		labyrint[24][i] = 1;
-		labyrint[i][0] = 1;
-		labyrint[i][24] = 1;
+		labyrint[0][i].value = 1;
+		labyrint[24][i].value = 1;
+		labyrint[i][0].value = 1;
+		labyrint[i][24].value = 1;
 
 	}
 }
@@ -52,8 +50,8 @@ void display(void) {
 
 	glPushMatrix();
 
-	displayPav(width,height);
-	displayMura(width,height,labyrint);
+	displayPav();
+	displayMura();
 	glPopMatrix();
 	glutSwapBuffers();
 }
@@ -98,7 +96,7 @@ void keyboard(unsigned char key, int x, int y) {
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowSize(500, 500);
+	glutInitWindowSize(1024, 768);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow(argv[0]);
 	init();

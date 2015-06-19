@@ -8,15 +8,17 @@
 
 #include <GL/glut.h>
 #include <math.h>
+#include "pavimento.h"
 
-void displayMura( int width, int height, int wall[][width]) {
+
+void displayMura() {
 	glPushMatrix();
 	glTranslatef(2.5, 2.5, 0.0);
 	for (int i = 0; i < width; i++) {
 
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
-			if (wall[i][j] == 1) {
+			if (labyrint[i][j].value == 1) {
 				glColor3f(1.0f, 0.0f, 1.0f);
 				glutSolidCube(5);
 			}
@@ -30,7 +32,7 @@ void displayMura( int width, int height, int wall[][width]) {
 	glPopMatrix();
 }
 
-void displayPav(int width, int height) {
+void displayPav() {
 
 	glColor3f(0.1, 0.1, 1);
 
