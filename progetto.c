@@ -1,7 +1,13 @@
-#include <windows.h>
+/*
+ * pavimento.c
+ *
+ *  Created on: 18/giu/2015
+ *  Author: Chiara
+ *  Modifier: Antonio 19/giu/2015
+ */
+
 #include <GL/glut.h>
 #include <math.h>
-//#include "pavimento.c"
 
 static GLdouble pi = 3.14159;
 static GLdouble angle = 0.0;
@@ -10,38 +16,27 @@ static GLdouble posy = 0.0;
 static GLdouble posfx = 1.0;
 static GLdouble posfy = 0.0;
 
-float zRot = 0.0;
-float xGo = 0.0;
-struct Cordinate {
-	double x, y, z;
-} Co[3];
+#define width 25
+#define height 25
 
-struct Muro
-{
-	int e;
-} Muro[25][25];
-
-
+int labyrint[width][height];
 
 void init(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_FLAT);
 	glEnable(GL_DEPTH_TEST);
-int i,j;
-	for(i=0; i<25; i++)
-	{
-		for(j=0; j<25; j++)
-			Muro[i][j].e=0;
+
+	int i, j;
+	for (i = 0; i < width; i++) {
+		for (j = 0; j < height; j++)
+			labyrint[i][j] = 0;
 	}
 
-
-
-	for(i=0; i<25; i++)
-	{
-		Muro[0][i].e=1;
-		Muro[24][i].e=1;
-		Muro[i][0].e=1;
-		Muro[i][24].e=1;
+	for (i = 0; i < width; i++) {
+		labyrint[0][i] = 1;
+		labyrint[24][i] = 1;
+		labyrint[i][0] = 1;
+		labyrint[i][24] = 1;
 
 	}
 }
@@ -52,15 +47,13 @@ void display(void) {
 	glColor3f(0.1, 0.1, 1.0);
 
 	glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+	glLoadIdentity();
 	gluLookAt(posx, posy, 1.5, posx + posfx, posy + posfy, 1.5, 0.0, 0.0, 1.0);
 
 	glPushMatrix();
 
-
-	displayPav();
-	 displayMura ();
-	 displayObjs();
+	displayPav(width,height);
+	displayMura(width,height,labyrint);
 	glPopMatrix();
 	glutSwapBuffers();
 }
@@ -72,28 +65,27 @@ void reshape(int w, int h) {
 	glLoadIdentity();
 	gluPerspective(60.0, (GLfloat) w / (GLfloat) h, 1.0, 500.0);
 
-
 }
 
 void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 'a':
 		angle += 2.0;
-		posfx = cos((angle*pi)/180);
-		posfy = sin((angle*pi)/180);
+		posfx = cos((angle * pi) / 180);
+		posfy = sin((angle * pi) / 180);
 		break;
 	case 'd':
 		angle -= 2.0;
-		posfx = cos((angle*pi)/180);
-		posfy = sin((angle*pi)/180);
+		posfx = cos((angle * pi) / 180);
+		posfy = sin((angle * pi) / 180);
 		break;
 	case 'w':
-		posx = posx + cos((angle*pi)/180);
-		posy = posy + sin((angle*pi)/180);
+		posx = posx + cos((angle * pi) / 180);
+		posy = posy + sin((angle * pi) / 180);
 		break;
 	case 's':
-		posx = posx - cos((angle*pi)/180);
-		posy = posy - sin((angle*pi)/180);
+		posx = posx - cos((angle * pi) / 180);
+		posy = posy - sin((angle * pi) / 180);
 		break;
 	case 27:
 		exit(0);
