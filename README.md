@@ -11,3 +11,8 @@ I tempi previsti per lo sviluppo sono di circa 2 settimane (salvo imprevisti), s
 Oltre al labirinto , si cercherà di implementare alcuni Mob i quali attacheranno il giocatore nelle vicinanze tentado di uccidervi.
 Il giocatore per difendersi dai nemici sarà provvisto di un'arma la quale però ha un periodo di ricarica abbastanza lungo, pertanto generalemente sarà meglio scappare che attaccare.  
 
+#Compiling Cmd
+##Linux
+  gcc -std=c11 -lGLU -lGL -lm -lglut
+##Windows
+  
