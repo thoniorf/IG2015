@@ -9,6 +9,7 @@
 #include <GL/glut.h>
 #include <math.h>
 #include "pavimento.h"
+#include "LabReader.h"
 
 static GLdouble pi = 3.14159;
 static GLdouble angle = 0.0;
@@ -22,16 +23,18 @@ void init(void) {
 	glShadeModel(GL_FLAT);
 	glEnable(GL_DEPTH_TEST);
 
+	freadlab();
+
 	int x = 2.5,y = 2.5;
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			labyrint[i][j].x = x;
 			labyrint[i][j].y = y;
-			labyrint[i][j].value = 0;
 			x += 5;
 		}
 		y += 5;
 	}
+	/*
 	// set perimeter
 	for (int i = 0; i < width; i++) {
 		labyrint[0][i].value = 1;
@@ -40,11 +43,11 @@ void init(void) {
 		labyrint[i][24].value = 1;
 
 	}
+	*/
 
 }
 
 void display(void) {
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(0.1, 0.1, 1.0);
 
@@ -53,7 +56,6 @@ void display(void) {
 	gluLookAt(posx, posy, 1.5, posx + posfx, posy + posfy, 1.5, 0.0, 0.0, 1.0);
 
 	glPushMatrix();
-
 	displayFloor();
 	displayRoof();
 	displayWall();
@@ -98,6 +100,8 @@ void keyboard(unsigned char key, int x, int y) {
 	}
 	glutPostRedisplay();
 }
+void timer(int t){
+}
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -108,6 +112,7 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
+	//glutTimerFunc(15,timer,15);
 	glutMainLoop();
 	return 0;
 }

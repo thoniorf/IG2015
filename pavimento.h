@@ -15,9 +15,10 @@ struct Cords
 {
 	float x ;
 	float y ;
-	int value;
+	char value;
 }labyrint[width][height];
 
+void initWall(int i, char buf[width+1]);
 void displayWall();
 void displayFloor();
 void displayRoof();

@@ -10,7 +10,11 @@
 #include <math.h>
 #include "pavimento.h"
 
-
+void initWall(int i, char buf[width+1]){
+	for(int j = 0; j < width; j++){
+		labyrint[i][j].value = buf[j];
+	}
+}
 void displayWall() {
 	glPushMatrix();
 	glTranslatef(2.5, 2.5, 0.0);
@@ -18,7 +22,7 @@ void displayWall() {
 
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
-			if (labyrint[i][j].value == 1) {
+			if (labyrint[i][j].value == '1') {
 				glColor3f(1.0f, 0.0f, 1.0f);
 				glutSolidCube(5);
 			}
