@@ -2,25 +2,23 @@
  * LabReader.c
  *
  *  Created on: Jun 20, 2015
- *      Author: thoniorf
+ *      Author: Antonio
+ *      Modifier: Antonio 20/giu/2015
  */
 #include "LabReader.h"
 #include "pavimento.h"
+
 bool freadlab() {
 	FILE *ptr_file;
-	char buf[width + 1];
+	char buf[width*height];
 
 	ptr_file = fopen("./labs/uno.txt", "r");
 	if (ptr_file == NULL)
 		return false;
 	int i = 0;
-	while (fgets(buf, width+1, ptr_file) != NULL)
+	while (fgets(buf, width*height, ptr_file) != NULL)
 	{
-		if(i < width)
-			initWall(i,buf);
-		else
-			break;
-		printf("%s", buf);
+		initWall(i,buf);
 		i++;
 	}
 
