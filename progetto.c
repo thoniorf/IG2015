@@ -21,17 +21,19 @@ static GLdouble posfy = 0.0;
 void init(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glEnable(GL_COLOR_MATERIAL);
-	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 	glShadeModel(GL_SMOOTH);
-
+	//glFrontFace(GL_CCW);
+	//glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	// set lights
-	GLfloat ambientLight[] = { 1.f, 1.f, 1.f, 1.0f };
-	GLfloat lightPos[] = { 50.f, 50.0f, 50.0f, 50.0f };
+
+	GLfloat ambientLight[] = { 0.5f, 0.5f, 0.5f, 1.0f};
+	GLfloat lightPos[] = { 200.f, 200.0f, 200.0f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHTING);
 	// enabling texture
 	glEnable(GL_TEXTURE_2D);
 
