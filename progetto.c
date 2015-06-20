@@ -20,12 +20,24 @@ static GLdouble posfy = 0.0;
 
 void init(void) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glShadeModel(GL_FLAT);
+	glEnable(GL_COLOR_MATERIAL);
+	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glShadeModel(GL_SMOOTH);
+
 	glEnable(GL_DEPTH_TEST);
+	// set lights
+	GLfloat ambientLight[] = { 1.f, 1.f, 1.f, 1.0f };
+	GLfloat lightPos[] = { 50.f, 50.0f, 50.0f, 50.0f };
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	// enabling texture
+	glEnable(GL_TEXTURE_2D);
 
 	freadlab();
 
-	int x = 2.5,y = 2.5;
+	int x = 2.5, y = 2.5;
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
 			labyrint[i][j].x = x;
@@ -35,15 +47,15 @@ void init(void) {
 		y += 5;
 	}
 	/*
-	// set perimeter
-	for (int i = 0; i < width; i++) {
-		labyrint[0][i].value = 1;
-		labyrint[24][i].value = 1;
-		labyrint[i][0].value = 1;
-		labyrint[i][24].value = 1;
+	 // set perimeter
+	 for (int i = 0; i < width; i++) {
+	 labyrint[0][i].value = 1;
+	 labyrint[24][i].value = 1;
+	 labyrint[i][0].value = 1;
+	 labyrint[i][24].value = 1;
 
-	}
-	*/
+	 }
+	 */
 
 }
 
@@ -85,8 +97,8 @@ void keyboard(unsigned char key, int x, int y) {
 		posfy = sin((angle * pi) / 180);
 		break;
 	case 'w':
-		posx = posx + cos((angle * pi) / 180);				// speed * cos -> change player walk speed
-		posy = posy + sin((angle * pi) / 180);				// the same as above with sin
+		posx = posx + cos((angle * pi) / 180);// speed * cos -> change player walk speed
+		posy = posy + sin((angle * pi) / 180);	// the same as above with sin
 		break;
 	case 's':
 		posx = posx - cos((angle * pi) / 180);				// as for 'w'
@@ -100,7 +112,7 @@ void keyboard(unsigned char key, int x, int y) {
 	}
 	glutPostRedisplay();
 }
-void timer(int t){
+void timer(int t) {
 }
 int main(int argc, char** argv) {
 	glutInit(&argc, argv);

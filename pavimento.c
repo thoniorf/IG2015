@@ -23,7 +23,7 @@ void displayWall() {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
 			if (labyrint[i][j].value == '1') {
-				glColor3f(1.0f, 0.0f, 1.0f);
+				glColor3f(0.8f, 0.33f, 0.12f);
 				glutSolidCube(5);
 			}
 			glTranslatef(5.0, 0.0, 0.0);
@@ -64,7 +64,7 @@ void displayFloor() {
 
 void displayRoof() {
 
-	glColor3f(1, 0.52, 0.0);
+	glColor3f(1.0, 0.28, 0.28);
 
 	glPushMatrix();
 	glTranslatef(0.0,0.0,2.5);
