@@ -7,6 +7,7 @@
  */
 
 #include <GL/glut.h>
+#include "utils/tga.h"
 #include <math.h>
 #include "pavimento.h"
 #include "LabReader.h"
@@ -19,6 +20,7 @@ static GLdouble posfx = 1.0;
 static GLdouble posfy = 0.0;
 
 void init(void) {
+
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
@@ -59,6 +61,20 @@ void init(void) {
 	 }
 	 */
 
+	GLubyte *pBytes;
+	GLint iWidth, iHeight, iComponents;
+	GLenum eFormat;
+	pBytes = gltLoadTGA("./assets/Stone.tga", &iWidth, &iHeight, &iComponents, &eFormat);
+	glTexImage2D(GL_TEXTURE_2D, 0, iComponents, iWidth, iHeight, 1, eFormat, GL_UNSIGNED_BYTE, pBytes);
+	free(pBytes);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glEnable(GL_TEXTURE_2D);
 }
 
 void display(void) {

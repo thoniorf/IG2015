@@ -24,6 +24,7 @@ void displayWall() {
 		for (int j = 0; j < height; j++) {
 			if (labyrint[i][j].value == '1') {
 				glColor3f(0.8f, 0.33f, 0.12f);
+				//usare i vertici !!
 				glutSolidCube(5);
 			}
 			glTranslatef(5.0, 0.0, 0.0);
