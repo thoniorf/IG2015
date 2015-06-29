@@ -25,8 +25,6 @@ void init(void) {
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 	glShadeModel(GL_SMOOTH);
-	//glFrontFace(GL_CCW);
-	//glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	// set lights
 
@@ -50,24 +48,15 @@ void init(void) {
 		}
 		y += 5;
 	}
-	/*
-	 // set perimeter
-	 for (int i = 0; i < width; i++) {
-	 labyrint[0][i].value = 1;
-	 labyrint[24][i].value = 1;
-	 labyrint[i][0].value = 1;
-	 labyrint[i][24].value = 1;
-
-	 }
-	 */
 
 	GLubyte *pBytes;
 	GLint iWidth, iHeight, iComponents;
 	GLenum eFormat;
 	pBytes = gltLoadTGA("./assets/Stone.tga", &iWidth, &iHeight, &iComponents, &eFormat);
-	glTexImage2D(GL_TEXTURE_2D, 0, iComponents, iWidth, iHeight, 1, eFormat, GL_UNSIGNED_BYTE, pBytes);
+	glTexImage2D(GL_TEXTURE_2D, 0, iComponents, iWidth, iHeight, 0, eFormat, GL_UNSIGNED_BYTE, pBytes);
 	free(pBytes);
 
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

@@ -8,6 +8,7 @@
 
 #include <GL/glut.h>
 #include <math.h>
+#include <stdio.h>
 #include "pavimento.h"
 
 static void drawBox(GLfloat size, GLenum type){
@@ -39,20 +40,18 @@ static void drawBox(GLfloat size, GLenum type){
   v[0][2] = v[3][2] = v[4][2] = v[7][2] = -size / 2;
   v[1][2] = v[2][2] = v[5][2] = v[6][2] = size / 2;
 
+  printf("%f %f %f\n",v[5][0],v[5][1],v[5][2]);
   for (i = 5; i >= 0; i--) {
     glBegin(type);
     glNormal3fv(&n[i][0]);
 
-    glTexCoord3fv(&v[faces[i][0]][0]);
+    glTexCoord3f(1.0,1.0,-1.0);
     glVertex3fv(&v[faces[i][0]][0]);
-
-    glTexCoord3fv(&v[faces[i][1]][1]);
+    glTexCoord3f(1.0,-1.0,-1.0);
     glVertex3fv(&v[faces[i][1]][0]);
-
-    glTexCoord3fv(&v[faces[i][2]][2]);
+    glTexCoord3f(-1.0,-1.0,-1.0);
     glVertex3fv(&v[faces[i][2]][0]);
-
-    glTexCoord3fv(&v[faces[i][3]][3]);
+    glTexCoord3f(-1.0,1.0,-1.0);
     glVertex3fv(&v[faces[i][3]][0]);
     glEnd();
   }
