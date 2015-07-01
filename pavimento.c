@@ -3,7 +3,7 @@
  *
  *  Created on: 18/giu/2015
  *  Author: Chiara
- *  Modifier: Antonio 20/giu/2015
+ *
  */
 
 #include "pavimento.h"
@@ -60,7 +60,7 @@ void initWall(int i, char buf[width+1]){
 
 }
 void initWallTexture(){
-	uvWall.pBytes = gltLoadTGA("./assets/Stone.tga", &uvWall.iWidth, &uvWall.iHeight, &uvWall.iComponents, &uvWall.eFormat);
+	uvWall.pBytes = gltLoadTGA("./assets/Wall.tga", &uvWall.iWidth, &uvWall.iHeight, &uvWall.iComponents, &uvWall.eFormat);
 	glTexImage2D(GL_TEXTURE_2D, 0, uvWall.iComponents, uvWall.iWidth, uvWall.iHeight, 0, uvWall.eFormat, GL_UNSIGNED_BYTE, uvWall.pBytes);
 	free(uvWall.pBytes);
 }
