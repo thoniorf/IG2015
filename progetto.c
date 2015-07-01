@@ -7,17 +7,25 @@
  */
 
 #include <GL/glut.h>
-#include "utils/tga.h"
 #include <math.h>
+#include <time.h>
+#include "utils/tga.h"
 #include "pavimento.h"
 #include "LabReader.h"
 
 static GLdouble pi = 3.14159;
-static GLdouble angle = 0.0;
-static GLdouble posx = 10.0;
-static GLdouble posy = 10.0;
-static GLdouble posfx = 1.0;
-static GLdouble posfy = 0.0;
+static time_t startTime;
+static time_t currentTime;
+static double diffTime;
+static double maxTime = 1; //minutes
+
+struct player {
+	GLdouble angle;
+	GLdouble posx;
+	GLdouble posy;
+	GLdouble posfx;
+	GLdouble posfy;
+}player;
 
 void init(void) {
 
@@ -26,19 +34,28 @@ void init(void) {
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_DEPTH_TEST);
-	// set lights
 
+	// set lights
 	GLfloat ambientLight[] = { 0.5f, 0.5f, 0.5f, 1.0f};
 	GLfloat lightPos[] = { 200.f, 200.0f, 200.0f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
-	// enabling texture
+
+	// set and enable texture
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glEnable(GL_TEXTURE_2D);
 
+	// read maze from file
 	freadlab();
 
+	// inizialize floor coords
 	int x = 2.5, y = 2.5;
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
@@ -49,21 +66,18 @@ void init(void) {
 		y += 5;
 	}
 
-	GLubyte *pBytes;
-	GLint iWidth, iHeight, iComponents;
-	GLenum eFormat;
-	pBytes = gltLoadTGA("./assets/Stone.tga", &iWidth, &iHeight, &iComponents, &eFormat);
-	glTexImage2D(GL_TEXTURE_2D, 0, iComponents, iWidth, iHeight, 0, eFormat, GL_UNSIGNED_BYTE, pBytes);
-	free(pBytes);
+	// load wall texture
+	initWallTexture();
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// inizialize player
+	player.angle = 0.0;
+	player.posx = 10.0;
+	player.posy = 10.0;
+	player.posfx = 1.0;
+	player.posfy = 0.0;
 
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glEnable(GL_TEXTURE_2D);
+	//start game timer
+	time(&startTime);
 }
 
 void display(void) {
@@ -72,7 +86,7 @@ void display(void) {
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(posx, posy, 1.5, posx + posfx, posy + posfy, 1.5, 0.0, 0.0, 1.0);
+	gluLookAt(player.posx, player.posy, 1.5, player.posx + player.posfx, player.posy + player.posfy, 1.5, 0.0, 0.0, 1.0);
 
 	glPushMatrix();
 	displayFloor();
@@ -94,22 +108,22 @@ void reshape(int w, int h) {
 void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 'a':
-		angle += 2.0;
-		posfx = cos((angle * pi) / 180);
-		posfy = sin((angle * pi) / 180);
+		player.angle += 2.0;
+		player.posfx = cos((player.angle * pi) / 180);
+		player.posfy = sin((player.angle * pi) / 180);
 		break;
 	case 'd':
-		angle -= 2.0;
-		posfx = cos((angle * pi) / 180);
-		posfy = sin((angle * pi) / 180);
+		player.angle -= 2.0;
+		player.posfx = cos((player.angle * pi) / 180);
+		player.posfy = sin((player.angle * pi) / 180);
 		break;
 	case 'w':
-		posx = posx + cos((angle * pi) / 180);// speed * cos -> change player walk speed
-		posy = posy + sin((angle * pi) / 180);	// the same as above with sin
+		player.posx = player.posx + cos((player.angle * pi) / 180);// speed * cos -> change player walk speed
+		player.posy = player.posy + sin((player.angle * pi) / 180);	// the same as above with sin
 		break;
 	case 's':
-		posx = posx - cos((angle * pi) / 180);				// as for 'w'
-		posy = posy - sin((angle * pi) / 180);
+		player.posx = player.posx - cos((player.angle * pi) / 180);				// as for 'w'
+		player.posy = player.posy - sin((player.angle * pi) / 180);
 		break;
 	case 27:
 		exit(0);
@@ -118,6 +132,15 @@ void keyboard(unsigned char key, int x, int y) {
 		break;
 	}
 	glutPostRedisplay();
+}
+void idle(){
+	time(&currentTime);
+	diffTime = difftime(currentTime,startTime);
+	if(diffTime >= maxTime*60)
+	{
+		printf("Time Over");
+		exit(0);
+	}
 }
 void timer(int t) {
 }
@@ -132,6 +155,7 @@ int main(int argc, char** argv) {
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
 	//glutTimerFunc(15,timer,15);
+	glutIdleFunc(idle);
 	glutMainLoop();
 	return 0;
 }

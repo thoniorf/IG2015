@@ -6,9 +6,6 @@
  *  Modifier: Antonio 20/giu/2015
  */
 
-#include <GL/glut.h>
-#include <math.h>
-#include <stdio.h>
 #include "pavimento.h"
 
 static void drawBox(GLfloat size, GLenum type){
@@ -40,7 +37,6 @@ static void drawBox(GLfloat size, GLenum type){
   v[0][2] = v[3][2] = v[4][2] = v[7][2] = -size / 2;
   v[1][2] = v[2][2] = v[5][2] = v[6][2] = size / 2;
 
-  printf("%f %f %f\n",v[5][0],v[5][1],v[5][2]);
   for (i = 5; i >= 0; i--) {
     glBegin(type);
     glNormal3fv(&n[i][0]);
@@ -61,6 +57,12 @@ void initWall(int i, char buf[width+1]){
 	for(int j = 0; j < width; j++){
 		labyrint[i][j].value = buf[j];
 	}
+
+}
+void initWallTexture(){
+	uvWall.pBytes = gltLoadTGA("./assets/Stone.tga", &uvWall.iWidth, &uvWall.iHeight, &uvWall.iComponents, &uvWall.eFormat);
+	glTexImage2D(GL_TEXTURE_2D, 0, uvWall.iComponents, uvWall.iWidth, uvWall.iHeight, 0, uvWall.eFormat, GL_UNSIGNED_BYTE, uvWall.pBytes);
+	free(uvWall.pBytes);
 }
 void displayWall() {
 	glColor3f(0.8f, 0.33f, 0.12f);
