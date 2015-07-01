@@ -8,6 +8,8 @@
 
 #include "pavimento.h"
 
+GLuint textures[2];
+
 static void drawBox(GLfloat size, GLenum type){
   static GLfloat n[6][3] =
   {
@@ -36,7 +38,7 @@ static void drawBox(GLfloat size, GLenum type){
   v[2][1] = v[3][1] = v[6][1] = v[7][1] = size / 2;
   v[0][2] = v[3][2] = v[4][2] = v[7][2] = -size / 2;
   v[1][2] = v[2][2] = v[5][2] = v[6][2] = size / 2;
-
+  glBindTexture(GL_TEXTURE_2D, textures[0]);
   for (i = 5; i >= 0; i--) {
     glBegin(type);
     glNormal3fv(&n[i][0]);
@@ -60,7 +62,15 @@ void initWall(int i, char buf[width+1]){
 
 }
 void initWallTexture(){
+	glGenTextures(2, textures);
+	glActiveTexture(GL_TEXTURE0);
+
 	uvWall.pBytes = gltLoadTGA("./assets/Wall.tga", &uvWall.iWidth, &uvWall.iHeight, &uvWall.iComponents, &uvWall.eFormat);
+	glTexImage2D(GL_TEXTURE_2D, 0, uvWall.iComponents, uvWall.iWidth, uvWall.iHeight, 0, uvWall.eFormat, GL_UNSIGNED_BYTE, uvWall.pBytes);
+	free(uvWall.pBytes);
+	glActiveTexture(GL_TEXTURE1);
+
+	uvWall.pBytes = gltLoadTGA("./assets/Floor.tga", &uvWall.iWidth, &uvWall.iHeight, &uvWall.iComponents, &uvWall.eFormat);
 	glTexImage2D(GL_TEXTURE_2D, 0, uvWall.iComponents, uvWall.iWidth, uvWall.iHeight, 0, uvWall.eFormat, GL_UNSIGNED_BYTE, uvWall.pBytes);
 	free(uvWall.pBytes);
 }
@@ -87,13 +97,18 @@ void displayWall() {
 void displayFloor() {
 	glColor3f(0.1, 0.1, 1);
 	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, textures[1]);
 	for (int i = 0; i < width; i++) {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
 			glBegin(GL_QUADS);
+			glTexCoord2f(0.0,0.0);
 			glVertex2f(0.0, 0.0);
+			glTexCoord2f(1.0,0.0);
 			glVertex2f(5., 0.0);
+			glTexCoord2f(1.0,1.0);
 			glVertex2f(5., 5.);
+			glTexCoord2f(0.0,1.0);
 			glVertex2f(0.0, 5.);
 			glEnd();
 			glTranslatef(5., 0.0, 0.0);
