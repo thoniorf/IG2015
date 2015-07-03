@@ -16,12 +16,13 @@
 #define width 25				// Maze columns
 #define height 25				// Maze rows
 
-#define N_Texture 2
+#define N_Texture 3
 #define Wall 0
 #define Floor 1
+#define Roof 2
 
 static GLuint textures[N_Texture];
-static const char *uv_file_name[N_Texture] = {"./assets/Wall.tga","./assets/Floor.tga"};
+static const char *uv_file_name[N_Texture] = {"./assets/Wall.tga","./assets/Floor.tga","./assets/Roof.tga"};
 
 struct Cords
 {

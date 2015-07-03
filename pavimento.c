@@ -23,10 +23,8 @@ static void drawBox(GLfloat size, GLenum type) {
 	v[2][1] = v[3][1] = v[6][1] = v[7][1] = size / 2;
 	v[0][2] = v[3][2] = v[4][2] = v[7][2] = -size / 2;
 	v[1][2] = v[2][2] = v[5][2] = v[6][2] = size / 2;
-	glBindTexture(GL_TEXTURE_2D, textures[0]);
 	for (i = 5; i >= 0; i--) {
 		glBegin(type);
-		glBindTexture(GL_TEXTURE_2D, textures[0]);
 		glNormal3fv(&n[i][0]);
 
 		glTexCoord3f(1.0, 1.0, -1.0);
@@ -91,7 +89,6 @@ void displayFloor() {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
 			glBegin(GL_QUADS);
-			glBindTexture(GL_TEXTURE_2D, textures[1]);
 			glTexCoord2f(0.0, 0.0);
 			glVertex2f(0.0, 0.0);
 			glTexCoord2f(1.0, 0.0);
@@ -111,7 +108,7 @@ void displayFloor() {
 }
 
 void displayRoof() {
-
+	glBindTexture(GL_TEXTURE_2D, textures[Roof]);
 	//glColor3f(1.0, 0.28, 0.28);
 	glPushMatrix();
 	glTranslatef(0.0, 0.0, 2.5);
@@ -121,9 +118,13 @@ void displayRoof() {
 		for (int j = 0; j < height; j++) {
 
 			glBegin(GL_QUADS);
+			glTexCoord2f(0.0, 0.0);
 			glVertex2f(0.0, 0.0);
+			glTexCoord2f(1.0, 0.0);
 			glVertex2f(5., 0.0);
+			glTexCoord2f(1.0, 1.0);
 			glVertex2f(5., 5.);
+			glTexCoord2f(0.0, 1.0);
 			glVertex2f(0.0, 5.);
 			glEnd();
 			glTranslatef(5., 0.0, 0.0);
