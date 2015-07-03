@@ -25,8 +25,28 @@ struct player {
 	GLdouble posy;
 	GLdouble posfx;
 	GLdouble posfy;
-}player;
+} player;
 
+void spawn() {
+	int x, y;
+	// inizialize player
+	player.angle = 0.0;
+	player.posfx = 1.0;
+	player.posfy = 0.0;
+
+	x = rand() % 24 + 1;
+	y = rand() % 24 + 1;
+
+	while (labyrint[x][y].value != '0') {
+		x = rand() % 2 - 1;
+		y = rand() % 2 - 1;
+		if(x>width || x < 0) x = rand() % 24 + 1;
+		if(y>height || y < 0) y = rand() % 24 + 1;
+	}
+	printf("%i , %i",x,y);
+	player.posx = labyrint[x][y].x;
+	player.posy = labyrint[x][y].y;
+}
 void init(void) {
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -34,9 +54,13 @@ void init(void) {
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_DEPTH_TEST);
-
-	// set lights
-	GLfloat ambientLight[] = { 0.5f, 0.5f, 0.5f, 1.0f};
+	glEnable(GL_FOG);
+	float FogCol[3] = { 0.8f, 0.8f, 0.8f };
+	glFogfv(GL_FOG_COLOR, FogCol);
+	glFogi(GL_FOG_MODE, GL_EXP);
+	glFogf(GL_FOG_DENSITY, 0.2f);
+	// set and enable lights
+	GLfloat ambientLight[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	GLfloat lightPos[] = { 200.f, 200.0f, 200.0f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
@@ -44,11 +68,6 @@ void init(void) {
 	glEnable(GL_LIGHTING);
 
 	// set and enable texture
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glEnable(GL_TEXTURE_2D);
 
@@ -58,23 +77,20 @@ void init(void) {
 	// inizialize floor coords
 	int x = 2.5, y = 2.5;
 	for (int i = 0; i < width; i++) {
+		y = 2.5;
 		for (int j = 0; j < height; j++) {
 			labyrint[i][j].x = x;
 			labyrint[i][j].y = y;
-			x += 5;
+			y += 5.;
 		}
-		y += 5;
+		x += 5.;
 	}
 
 	// load wall texture
-	initWallTexture();
+	initTexture();
 
-	// inizialize player
-	player.angle = 0.0;
-	player.posx = 10.0;
-	player.posy = 10.0;
-	player.posfx = 1.0;
-	player.posfy = 0.0;
+	// set player
+	spawn();
 
 	//start game timer
 	time(&startTime);
@@ -82,11 +98,11 @@ void init(void) {
 
 void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glColor3f(0.1, 0.1, 1.0);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(player.posx, player.posy, 1.5, player.posx + player.posfx, player.posy + player.posfy, 1.5, 0.0, 0.0, 1.0);
+	gluLookAt(player.posx, player.posy, 1.5, player.posx + player.posfx,
+			player.posy + player.posfy, 1.5, 0.0, 0.0, 1.0);
 
 	glPushMatrix();
 	displayFloor();
@@ -118,11 +134,11 @@ void keyboard(unsigned char key, int x, int y) {
 		player.posfy = sin((player.angle * pi) / 180);
 		break;
 	case 'w':
-		player.posx = player.posx + cos((player.angle * pi) / 180);// speed * cos -> change player walk speed
+		player.posx = player.posx + cos((player.angle * pi) / 180); // speed * cos -> change player walk speed
 		player.posy = player.posy + sin((player.angle * pi) / 180);	// the same as above with sin
 		break;
 	case 's':
-		player.posx = player.posx - cos((player.angle * pi) / 180);				// as for 'w'
+		player.posx = player.posx - cos((player.angle * pi) / 180);	// as for 'w'
 		player.posy = player.posy - sin((player.angle * pi) / 180);
 		break;
 	case 27:
@@ -133,11 +149,10 @@ void keyboard(unsigned char key, int x, int y) {
 	}
 	glutPostRedisplay();
 }
-void idle(){
+void idle() {
 	time(&currentTime);
-	diffTime = difftime(currentTime,startTime);
-	if(diffTime >= maxTime*60)
-	{
+	diffTime = difftime(currentTime, startTime);
+	if (diffTime >= maxTime * 60) {
 		printf("Time Over");
 		exit(0);
 	}
@@ -145,6 +160,7 @@ void idle(){
 void timer(int t) {
 }
 int main(int argc, char** argv) {
+	srand(time(0));
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowSize(1024, 768);

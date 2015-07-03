@@ -3,7 +3,6 @@
  *
  *  Created on: Jun 19, 2015
  *      Author: Antonio
- *      Modifier: Antonio 20/giu/2015
  */
 
 #ifndef PAVIMENTO_H_
@@ -14,24 +13,32 @@
 #include <stdio.h>
 #include "utils/tga.h"
 
-#define width 25
-#define height 25
+#define width 25				// Maze columns
+#define height 25				// Maze rows
+
+#define N_Texture 2
+#define Wall 0
+#define Floor 1
+
+static GLuint textures[N_Texture];
+static const char *uv_file_name[N_Texture] = {"./assets/Wall.tga","./assets/Floor.tga"};
 
 struct Cords
 {
-	float x ;
-	float y ;
+	GLdouble x ;
+	GLdouble y ;
 	char value;
 }labyrint[width][height];
 
-struct texture {
+struct Uv {
 	GLubyte *pBytes;
 	GLint iWidth, iHeight, iComponents;
 	GLenum eFormat;
-}uvWall;
+}uv;
+
 
 void initWall(int i, char buf[width+1]);
-void initWallTexture();
+void initTexture();
 void displayWall();
 void displayFloor();
 void displayRoof();
