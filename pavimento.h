@@ -16,10 +16,10 @@
 #define width 25				// Maze columns
 #define height 25				// Maze rows
 
-#define N_Texture 3
-#define Wall 0
-#define Floor 1
-#define Roof 2
+#define N_Texture 3				// Texture number
+#define Wall 0					// Wall texture index
+#define Floor 1					// Floor
+#define Roof 2					// Roof
 
 static GLuint textures[N_Texture];
 static const char *uv_file_name[N_Texture] = {"./assets/Wall.tga","./assets/Floor.tga","./assets/Roof.tga"};
@@ -39,6 +39,7 @@ struct Uv {
 
 
 void initWall(int i, char buf[width+1]);
+void initFloor();
 void initTexture();
 void displayWall();
 void displayFloor();

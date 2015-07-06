@@ -5,7 +5,8 @@
  *  Author: Chiara
  *  Modifier: Antonio 20/giu/2015
  */
-
+// Not Commited !
+// I fantasmi dovranno lampeggiare !
 #include <GL/glut.h>
 #include <math.h>
 #include <time.h>
@@ -21,6 +22,7 @@ static double maxTime = 1; //minutes
 
 struct player {
 	GLdouble angle;
+	GLdouble speed;
 	GLdouble posx;
 	GLdouble posy;
 	GLdouble posfx;
@@ -30,6 +32,7 @@ struct player {
 void spawn() {
 	int x, y;
 	// inizialize player
+	player.speed = 0.25;
 	player.angle = 0.0;
 	player.posfx = 1.0;
 	player.posfy = 0.0;
@@ -43,53 +46,48 @@ void spawn() {
 		if(x>width || x < 0) x = rand() % 24 + 1;
 		if(y>height || y < 0) y = rand() % 24 + 1;
 	}
-	printf("%i , %i",x,y);
 	player.posx = labyrint[x][y].x;
 	player.posy = labyrint[x][y].y;
 }
 void init(void) {
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
+	// enable Materials
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+	// enable shadows
 	glShadeModel(GL_SMOOTH);
+	// enable depth
 	glEnable(GL_DEPTH_TEST);
+	//enable fog
 	glEnable(GL_FOG);
 	float FogCol[3] = { 0.8f, 0.8f, 0.8f };
 	glFogfv(GL_FOG_COLOR, FogCol);
 	glFogi(GL_FOG_MODE, GL_EXP);
 	glFogf(GL_FOG_DENSITY, 0.2f);
 	// set and enable lights
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 	GLfloat ambientLight[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	GLfloat lightPos[] = { 200.f, 200.0f, 200.0f, 1.0f };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-	glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHTING);
+
 
 	// set and enable texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glEnable(GL_TEXTURE_2D);
 
-	// read maze from file
+	// init Maze Wall
 	freadlab();
 
-	// inizialize floor coords
-	int x = 2.5, y = 2.5;
-	for (int i = 0; i < width; i++) {
-		y = 2.5;
-		for (int j = 0; j < height; j++) {
-			labyrint[i][j].x = x;
-			labyrint[i][j].y = y;
-			y += 5.;
-		}
-		x += 5.;
-	}
+	// init Floor cords
+	initFloor();
 
 	// load wall texture
 	initTexture();
 
-	// set player
+	// random spawn player
 	spawn();
 
 	//start game timer
@@ -134,12 +132,12 @@ void keyboard(unsigned char key, int x, int y) {
 		player.posfy = sin((player.angle * pi) / 180);
 		break;
 	case 'w':
-		player.posx = player.posx + cos((player.angle * pi) / 180); // speed * cos -> change player walk speed
-		player.posy = player.posy + sin((player.angle * pi) / 180);	// the same as above with sin
+		player.posx = player.posx + player.speed*cos((player.angle * pi) / 180); // speed * cos -> change player walk speed
+		player.posy = player.posy + player.speed*sin((player.angle * pi) / 180);	// the same as above with sin
 		break;
 	case 's':
-		player.posx = player.posx - cos((player.angle * pi) / 180);	// as for 'w'
-		player.posy = player.posy - sin((player.angle * pi) / 180);
+		player.posx = player.posx - (player.speed-0.1)*cos((player.angle * pi) / 180);	// as for 'w'
+		player.posy = player.posy - (player.speed-0.1)*sin((player.angle * pi) / 180);
 		break;
 	case 27:
 		exit(0);

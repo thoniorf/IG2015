@@ -45,6 +45,18 @@ void initWall(int i, char buf[width + 1]) {
 	}
 
 }
+void initFloor() {
+	int x = 2.5, y = 2.5;
+		for (int i = 0; i < width; i++) {
+			y = 2.5;
+			for (int j = 0; j < height; j++) {
+				labyrint[i][j].x = x;
+				labyrint[i][j].y = y;
+				y += 5.;
+			}
+			x += 5.;
+		}
+}
 void initTexture() {
 	glGenTextures(N_Texture, textures);
 	for (int i = 0; i < N_Texture; i++) {

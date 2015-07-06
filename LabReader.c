@@ -3,7 +3,7 @@
  *
  *  Created on: Jun 20, 2015
  *      Author: Antonio
- *      Modifier: Antonio 20/giu/2015
+ *
  */
 #include "LabReader.h"
 #include "pavimento.h"
@@ -12,7 +12,7 @@ bool freadlab() {
 	FILE *ptr_file;
 	char buf[width*height];
 
-	ptr_file = fopen("./labs/uno.txt", "r");
+	ptr_file = fopen(maze, "r");
 	if (ptr_file == NULL)
 		return false;
 	int i = 0;
