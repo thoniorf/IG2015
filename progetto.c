@@ -8,6 +8,7 @@
 // Not Commited !
 // I fantasmi dovranno lampeggiare !
 #include <GL/glut.h>
+#include <stdlib.h>
 #include <math.h>
 #include <time.h>
 #include "utils/tga.h"
@@ -61,10 +62,10 @@ void init(void) {
 	glEnable(GL_DEPTH_TEST);
 	//enable fog
 	glEnable(GL_FOG);
-	float FogCol[3] = { 0.8f, 0.8f, 0.8f };
+	float FogCol[3] = { 1.0f, 0.0f, 0.0f };
 	glFogfv(GL_FOG_COLOR, FogCol);
 	glFogi(GL_FOG_MODE, GL_EXP);
-	glFogf(GL_FOG_DENSITY, 0.2f);
+	glFogf(GL_FOG_DENSITY, 0.35f);
 	// set and enable lights
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
@@ -91,7 +92,7 @@ void init(void) {
 	spawn();
 
 	//start game timer
-	time(&startTime);
+	time(startTime);
 }
 
 void display(void) {
@@ -119,8 +120,24 @@ void reshape(int w, int h) {
 
 }
 
+int converti (double x)
+{
+	return (int)((x*0.5)/2.5);
+}
+
+bool collisioni (double x, double y)
+{
+	printf("%f -- %i\n",x,converti(x));
+	if (labyrint[converti(x)][converti(y)].value == '0')
+		return false;
+	else
+		return true;
+}
+
+
 void keyboard(unsigned char key, int x, int y) {
-	switch (key) {
+	switch (key)
+	{
 	case 'a':
 		player.angle += 2.0;
 		player.posfx = cos((player.angle * pi) / 180);
@@ -132,6 +149,8 @@ void keyboard(unsigned char key, int x, int y) {
 		player.posfy = sin((player.angle * pi) / 180);
 		break;
 	case 'w':
+		if(collisioni ( player.posx + player.speed*cos((player.angle * pi) / 180),player.posy + player.speed*sin((player.angle * pi) / 180)))
+			break;
 		player.posx = player.posx + player.speed*cos((player.angle * pi) / 180); // speed * cos -> change player walk speed
 		player.posy = player.posy + player.speed*sin((player.angle * pi) / 180);	// the same as above with sin
 		break;
@@ -148,7 +167,7 @@ void keyboard(unsigned char key, int x, int y) {
 	glutPostRedisplay();
 }
 void idle() {
-	time(&currentTime);
+	time(currentTime);
 	diffTime = difftime(currentTime, startTime);
 	if (diffTime >= maxTime * 60) {
 		printf("Time Over");
