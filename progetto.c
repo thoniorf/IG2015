@@ -30,11 +30,6 @@ struct player {
 	GLdouble posfy;
 } player;
 
-int converti (double x)
-{
-	return (int)((x*0.5)/2.5);
-}
-
 void spawn() {
 	int x, y;
 	// inizialize player
@@ -66,7 +61,7 @@ void init(void) {
 	// enable depth
 	glEnable(GL_DEPTH_TEST);
 	//enable fog
-	glEnable(GL_FOG);
+//	glEnable(GL_FOG);
 	float FogCol[3] = { 1.0f, 0.0f, 0.0f };
 	glFogfv(GL_FOG_COLOR, FogCol);
 	glFogi(GL_FOG_MODE, GL_EXP);
@@ -95,8 +90,7 @@ void init(void) {
 
 	// random spawn player
 	spawn();
-	printf("%f -- %i, ",player.posx+player.posfx,converti(player.posx+player.posfx));
-	printf("%f -- %i\n",player.posy+player.posfy,converti(player.posy+player.posfy));
+
 	//start game timer
 	time(startTime);
 }
@@ -114,6 +108,7 @@ void display(void) {
 	displayRoof();
 	displayWall();
 	glPopMatrix();
+	glutPostRedisplay();
 	glutSwapBuffers();
 }
 
@@ -126,18 +121,38 @@ void reshape(int w, int h) {
 
 }
 
-bool collisioni (double x, double y)
-{
-	printf("%f -- %i, ",x,converti(x));
-	printf("%f -- %i\n",y,converti(y));
-	if (labyrint[converti(x)][converti(y)].value == '0')
-		return false;
-	else
-		return true;
-}
 
+bool notcollisioni (double x, double y)
+{
+
+	if ((labyrint[(int)y][(int)x].value) == '0')
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+/*
+//tocca il cubo e diventa una sfera
+void sfera(double x,double y)
+{
+	if(labyrint[y][x].value == 's')
+	{
+		glPushMatrix();
+		glTranslatef(0.0, 0.0, 1.25);
+		glRotatef(exitangle,0.0,0.0,1.0);
+			//glBindTexture(GL_TEXTURE_2D, textures[Wall]);
+		gluSphere(2.0,5.0,0.8);
+		glPopMatrix();
+
+	}
+}
+*/
 
 void keyboard(unsigned char key, int x, int y) {
+
 	switch (key)
 	{
 	case 'a':
@@ -151,12 +166,18 @@ void keyboard(unsigned char key, int x, int y) {
 		player.posfy = sin((player.angle * pi) / 180);
 		break;
 	case 'w':
-		if(collisioni (player.posx+player.posfx,player.posy+player.posfy ))
+		/*if((player.posx + player.posfx)/5 + player.speed*cos((player.angle * pi) / 180)==24 && (player.posy + player.posfy)/5 + player.speed*sin((player.angle * pi) / 180)==23 || (player.posx + player.posfx)/5 + player.speed*cos((player.angle * pi) / 180)==23 && (player.posy + player.posfy)/5 + player.speed*sin((player.angle * pi) / 180)==24  )
+		{
+			sfera(double x,double y);
+		}*/
+		if(!notcollisioni ( (player.posx + player.posfx)/5 + player.speed*cos((player.angle * pi) / 180),(player.posy + player.posfy)/5 + player.speed*sin((player.angle * pi) / 180)))
 			break;
 		player.posx = player.posx + player.speed*cos((player.angle * pi) / 180); // speed * cos -> change player walk speed
 		player.posy = player.posy + player.speed*sin((player.angle * pi) / 180);	// the same as above with sin
 		break;
 	case 's':
+		if(!notcollisioni ((player.posx - player.posfx)/5 - (player.speed-0.1)*cos((player.angle * pi) / 180),(player.posy - player.posfy)/5 - (player.speed-0.1)*sin((player.angle * pi) / 180))  )
+					break;
 		player.posx = player.posx - (player.speed-0.1)*cos((player.angle * pi) / 180);	// as for 'w'
 		player.posy = player.posy - (player.speed-0.1)*sin((player.angle * pi) / 180);
 		break;
@@ -169,6 +190,9 @@ void keyboard(unsigned char key, int x, int y) {
 	glutPostRedisplay();
 }
 void idle() {
+
+
+
 	time(currentTime);
 	diffTime = difftime(currentTime, startTime);
 	if (diffTime >= maxTime * 60) {

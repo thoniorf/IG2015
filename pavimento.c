@@ -8,6 +8,7 @@
 
 #include "pavimento.h"
 
+
 static void drawBox(GLfloat size, GLenum type) {
 	static GLfloat n[6][3] = { { -1.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 1.0,
 			0.0, 0.0 }, { 0.0, -1.0, 0.0 }, { 0.0, 0.0, 1.0 },
@@ -81,8 +82,20 @@ void displayWall() {
 	for (int i = 0; i < width; i++) {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
-			if (labyrint[i][j].value == '1') {
+			if (labyrint[i][j].value == '1')
+			{
 				drawBox(5, GL_QUADS);
+			}
+			if(labyrint[i][j].value == 'e')
+			{
+				//if per far girare il cubo (se supera i 360 gradi,torna a 0, altrimenti si incrementa di 25gradi)
+				exitangle = (exitangle >= 360 )? 0:exitangle + 10;
+					glPushMatrix();
+					glTranslatef(0.0, 0.0, 1.25);
+					glRotatef(exitangle,0.0,0.0,1.0);
+				//glBindTexture(GL_TEXTURE_2D, textures[Wall]);
+				drawBox(1.0, GL_QUADS);
+					glPopMatrix();
 			}
 			glTranslatef(5., 0.0, 0.0);
 		}
