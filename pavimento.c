@@ -85,6 +85,7 @@ void displayWall() {
 			if (labyrint[i][j].value == '1')
 			{
 				drawBox(5, GL_QUADS);
+
 			}
 			if(labyrint[i][j].value == 'e')
 			{
