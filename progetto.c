@@ -184,7 +184,6 @@ void keyboard(unsigned char key, int x, int y) {
 	case 27:
 		exit(0);
 		break;
-
 	default:
 		break;
 	}
