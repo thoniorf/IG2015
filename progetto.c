@@ -30,6 +30,11 @@ struct player {
 	GLdouble posfy;
 } player;
 
+int converti (double x)
+{
+	return (int)((x*0.5)/2.5);
+}
+
 void spawn() {
 	int x, y;
 	// inizialize player
@@ -90,7 +95,8 @@ void init(void) {
 
 	// random spawn player
 	spawn();
-
+	printf("%f -- %i, ",player.posx+player.posfx,converti(player.posx+player.posfx));
+	printf("%f -- %i\n",player.posy+player.posfy,converti(player.posy+player.posfy));
 	//start game timer
 	time(startTime);
 }
@@ -120,14 +126,10 @@ void reshape(int w, int h) {
 
 }
 
-int converti (double x)
-{
-	return (int)((x*0.5)/2.5);
-}
-
 bool collisioni (double x, double y)
 {
-	printf("%f -- %i\n",x,converti(x));
+	printf("%f -- %i, ",x,converti(x));
+	printf("%f -- %i\n",y,converti(y));
 	if (labyrint[converti(x)][converti(y)].value == '0')
 		return false;
 	else
@@ -149,7 +151,7 @@ void keyboard(unsigned char key, int x, int y) {
 		player.posfy = sin((player.angle * pi) / 180);
 		break;
 	case 'w':
-		if(collisioni ( player.posx + player.speed*cos((player.angle * pi) / 180),player.posy + player.speed*sin((player.angle * pi) / 180)))
+		if(collisioni (player.posx+player.posfx,player.posy+player.posfy ))
 			break;
 		player.posx = player.posx + player.speed*cos((player.angle * pi) / 180); // speed * cos -> change player walk speed
 		player.posy = player.posy + player.speed*sin((player.angle * pi) / 180);	// the same as above with sin
