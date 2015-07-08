@@ -24,6 +24,15 @@
 static GLuint textures[N_Texture];
 static const char *uv_file_name[N_Texture] = {"./assets/Wall.tga","./assets/Floor.tga","./assets/Roof.tga"};
 
+static float exitangle=0.0;
+
+static float lato=1.0;//lato del cubo
+static float raggio=0.2;//raggio della sfera
+
+static int stato=0;//stato del gioco
+
+
+
 struct Cords
 {
 	GLdouble x ;
