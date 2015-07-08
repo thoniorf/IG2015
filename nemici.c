@@ -31,8 +31,8 @@ void displayEnemy() {
 	for (int i = 0; i < 6; i++) {
 		if (enemy[i].alive == 1) {
 			glPushMatrix();
-			glTranslatef(enemy[i].posx, enemy[i].posy, 1);
-			glutSolidSphere(.5,15,15);
+			glTranslatef(enemy[i].posx, enemy[i].posy, 1.25);
+			glutSolidSphere(1,15,15);
 			glPopMatrix();
 		}
 	}

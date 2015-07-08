@@ -102,8 +102,12 @@ void displayFloor() {
 	for (int i = 0; i < width; i++) {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
-			if(i == ai && j == aj)
-				glColor4f(1.0,0.0,0.0,1);
+			if(i == ai && j == aj || i == ai+1 && j == aj || i == ai+1 && j == aj+1 || i == ai && j == aj+1 ){
+				glColor4f(1.0,0.0,0.0,1.0);
+			} else {
+				glColor4f(1.,1.,1.,1.);
+			}
+
 			glBegin(GL_QUADS);
 			glNormal3f(0.0,0.0,1.0);
 			glTexCoord2f(0.0, 0.0);
