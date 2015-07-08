@@ -27,7 +27,7 @@ void setEnemyCords(GLdouble x, GLdouble y, int i) {
 }
 
 void displayEnemy() {
-	glColor4f(1.,1.,1.,0.2);
+	glColor4f(1.0,1.0,1.0,1);
 	for (int i = 0; i < 6; i++) {
 		if (enemy[i].alive == 1) {
 			glPushMatrix();
@@ -36,22 +36,20 @@ void displayEnemy() {
 			glPopMatrix();
 		}
 	}
+	glColor4f(1.,1.,1.,1.);
 }
 
 void movement() {
-	int ey;
-	int ex;
 	for (int i = 0; i < 6; i++) {
-		ey = (int)(enemy[i].posy/5 + enemy[i].speed * sin((enemy[i].angle * pi) / 180));
-		ex = (int)(enemy[i].posx/5 + enemy[i].speed * cos((enemy[i].angle * pi) / 180));
+
 		if (enemy[i].alive == 1) {
 			if(enemy[i].currentstep <= enemy[i].step){
 				if((int)(enemy[i].posy/5) < 25 && (int)(enemy[i].posy/5) >= 0 && (int)(enemy[i].posx/5) < 25 && (int)(enemy[i].posx/5) >= 0)
 					enemies[(int)(enemy[i].posy/5)][(int)(enemy[i].posx/5)] = -1;
 				enemy[i].posx = enemy[i].posx + enemy[i].speed * cos((enemy[i].angle * pi) / 180);
 				enemy[i].posy = enemy[i].posy + enemy[i].speed * sin((enemy[i].angle * pi) / 180);
-				if(ey < 25 && ey >= 0 && ex < 25 && ex >= 0)
-					enemies[ey][ex] = i;
+				if((int)(enemy[i].posy/5) < 25 && (int)(enemy[i].posy/5) >= 0 && (int)(enemy[i].posx/5) < 25 && (int)(enemy[i].posx/5) >= 0)
+					enemies[(int)(enemy[i].posy/5)][(int)(enemy[i].posx/5)] = i;
 				enemy[i].currentstep += 1;
 			} else {
 				enemy[i].currentstep = 0;

@@ -60,6 +60,8 @@ void init(void) {
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glEnable(GL_NORMALIZE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	// enable Materials
 	glEnable(GL_COLOR_MATERIAL);
 	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
@@ -68,7 +70,7 @@ void init(void) {
 	// enable depth
 	glEnable(GL_DEPTH_TEST);
 	//enable fog
-	glEnable(GL_FOG);
+	//glEnable(GL_FOG);
 	float FogCol[3] = { 0.35f, 0.35f, 0.35f };
 	glFogfv(GL_FOG_COLOR, FogCol);
 	glFogi(GL_FOG_MODE, GL_EXP);
@@ -110,7 +112,7 @@ void init(void) {
 
 void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	glColor4f(1.0,1.0,1.0,1.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(player.posx, player.posy, 1.5, player.posx + player.posfx,

@@ -71,13 +71,13 @@ void displayExit() {
 
 void displayWall() {
 	glBindTexture(GL_TEXTURE_2D, textures[Wall]);
-	glPushMatrix();
 	glTranslatef(2.5, 2.5, 0.0);
+	glPushMatrix();
 	for (int i = 0; i < width; i++) {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
 			if (labyrint[i][j].value == '1') {
-				drawBox(5, GL_QUADS);
+				//drawBox(5, GL_QUADS);
 			}
 			if (labyrint[i][j].value == 'e') {
 				displayExit();
