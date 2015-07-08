@@ -11,6 +11,8 @@
 #include <GL/glut.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include "utils/tga.h"
 
 #define width 25				// Maze columns
@@ -52,7 +54,7 @@ void initTexture();
 void displayWall();
 void displayFloor();
 void displayRoof();
-void vittoria_sfera(double x, double y);
+bool vittoria_sfera(double x, double y);
 
 static void drawBox(GLfloat size, GLenum type) {
 	static GLfloat n[6][3] = { { -1.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 1.0,

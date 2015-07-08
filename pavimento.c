@@ -46,10 +46,16 @@ void initTexture() {
 }
 
 //funzione per far apparire la sfera al posto del quadrato
-void vittoria_sfera(double x, double y) {
+bool vittoria_sfera(double x, double y) {
 	if ((labyrint[(int) y][(int) x].value) == 'e') {
 		stato = 1;
+		glutKeyboardFunc(NULL);
+				printf("You Win");
+				glutIdleFunc(NULL);
+				glutPostRedisplay();
 	}
+
+	return false;
 }
 
 void displayExit() {
@@ -102,7 +108,7 @@ void displayFloor() {
 	for (int i = 0; i < width; i++) {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
-			if(i == ai && j == aj || i == ai+1 && j == aj || i == ai+1 && j == aj+1 || i == ai && j == aj+1 ){
+			if((i == ai && j == aj) || (i == ai+1 && j == aj )|| (i == ai+1 && j == aj+1) ||( i == ai && j == aj+1) ){
 				glColor4f(1.0,0.0,0.0,1.0);
 			} else {
 				glColor4f(1.,1.,1.,1.);
