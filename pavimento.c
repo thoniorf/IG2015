@@ -47,8 +47,6 @@ void initTexture() {
 void vittoria_sfera(double x, double y) {
 	if ((labyrint[(int) y][(int) x].value) == 'e') {
 		stato = 1;
-		glutIdleFunc(NULL);
-		glutKeyboardFunc(NULL);
 	}
 }
 
@@ -79,7 +77,7 @@ void displayWall() {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
 			if (labyrint[i][j].value == '1') {
-				//drawBox(5, GL_QUADS);
+				drawBox(5, GL_QUADS);
 			}
 			if (labyrint[i][j].value == 'e') {
 				displayExit();

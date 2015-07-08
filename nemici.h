@@ -2,7 +2,7 @@
 #define NEMICI_H_
 
 #include <math.h>
-#define _USE_MATH_DEFINES
+#include <stdlib.h>
 #include "pavimento.h"
 
 struct enemy {
@@ -13,7 +13,7 @@ struct enemy {
 	GLdouble speed;
 	GLdouble posx;
 	GLdouble posy;
-}enemy[5];
+}enemy[6];
 
 int enemies[width][height];
 
