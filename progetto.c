@@ -5,8 +5,9 @@
  *  Author: Chiara
  *  Modifier: Antonio 20/giu/2015
  */
-// Not Commited !
+
 // I fantasmi dovranno lampeggiare !
+
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <math.h>
@@ -20,6 +21,7 @@ static time_t startTime;
 static time_t currentTime;
 static double diffTime;
 static double maxTime = 1; //minutes
+
 
 struct player {
 	GLdouble angle;
@@ -41,7 +43,7 @@ void spawn() {
 	x = rand() % 24 + 1;
 	y = rand() % 24 + 1;
 
-	while (labyrint[x][y].value != '0') {
+	while (labyrint[y][x].value != '0') {
 		x = rand() % 2 - 1;
 		y = rand() % 2 - 1;
 		if(x>width || x < 0) x = rand() % 24 + 1;
@@ -61,8 +63,8 @@ void init(void) {
 	// enable depth
 	glEnable(GL_DEPTH_TEST);
 	//enable fog
-//	glEnable(GL_FOG);
-	float FogCol[3] = { 1.0f, 0.0f, 0.0f };
+	//glEnable(GL_FOG);
+	float FogCol[3] = { 0.0f, 0.0f, 0.0f };
 	glFogfv(GL_FOG_COLOR, FogCol);
 	glFogi(GL_FOG_MODE, GL_EXP);
 	glFogf(GL_FOG_DENSITY, 0.35f);
@@ -108,7 +110,7 @@ void display(void) {
 	displayRoof();
 	displayWall();
 	glPopMatrix();
-	glutPostRedisplay();
+
 	glutSwapBuffers();
 }
 
@@ -130,26 +132,11 @@ bool notcollisioni (double x, double y)
 		return true;
 	}
 	else
-	{
-		return false;
-	}
-}
-/*
-//tocca il cubo e diventa una sfera
-void sfera(double x,double y)
-{
-	if(labyrint[y][x].value == 's')
-	{
-		glPushMatrix();
-		glTranslatef(0.0, 0.0, 1.25);
-		glRotatef(exitangle,0.0,0.0,1.0);
-			//glBindTexture(GL_TEXTURE_2D, textures[Wall]);
-		gluSphere(2.0,5.0,0.8);
-		glPopMatrix();
 
-	}
+		return false;
 }
-*/
+
+
 
 void keyboard(unsigned char key, int x, int y) {
 
@@ -166,10 +153,7 @@ void keyboard(unsigned char key, int x, int y) {
 		player.posfy = sin((player.angle * pi) / 180);
 		break;
 	case 'w':
-		/*if((player.posx + player.posfx)/5 + player.speed*cos((player.angle * pi) / 180)==24 && (player.posy + player.posfy)/5 + player.speed*sin((player.angle * pi) / 180)==23 || (player.posx + player.posfx)/5 + player.speed*cos((player.angle * pi) / 180)==23 && (player.posy + player.posfy)/5 + player.speed*sin((player.angle * pi) / 180)==24  )
-		{
-			sfera(double x,double y);
-		}*/
+		vittoria_sfera((player.posx + player.posfx)/5 + player.speed*cos((player.angle * pi) / 180),(player.posy + player.posfy)/5 + player.speed*sin((player.angle * pi) / 180));
 		if(!notcollisioni ( (player.posx + player.posfx)/5 + player.speed*cos((player.angle * pi) / 180),(player.posy + player.posfy)/5 + player.speed*sin((player.angle * pi) / 180)))
 			break;
 		player.posx = player.posx + player.speed*cos((player.angle * pi) / 180); // speed * cos -> change player walk speed
@@ -191,16 +175,17 @@ void keyboard(unsigned char key, int x, int y) {
 }
 void idle() {
 
-
-
 	time(currentTime);
 	diffTime = difftime(currentTime, startTime);
 	if (diffTime >= maxTime * 60) {
 		printf("Time Over");
 		exit(0);
 	}
+	glutPostRedisplay();
 }
-void timer(int t) {
+void timer(int t)
+{
+
 }
 int main(int argc, char** argv) {
 	srand(time(0));
@@ -213,8 +198,11 @@ int main(int argc, char** argv) {
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
-	//glutTimerFunc(15,timer,15);
+	glutTimerFunc(1,timer,5);
 	glutIdleFunc(idle);
+
+
 	glutMainLoop();
+
 	return 0;
 }
