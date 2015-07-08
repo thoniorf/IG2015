@@ -77,11 +77,10 @@ void initTexture() {
 //funzione per far apparire la sfera al posto del quadrato
 void vittoria_sfera(double x, double y) {
 	if ((labyrint[(int) y][(int) x].value) == 'e') {
-		stato=1;
+		stato = 1;
 		glutIdleFunc(NULL);
 		glutKeyboardFunc(NULL);
 	}
-
 }
 
 void displayExit() {
@@ -91,19 +90,16 @@ void displayExit() {
 	glPushMatrix();
 	glTranslatef(0.0, 0.0, 1.25);
 	glRotatef(exitangle, 0.0, 0.0, 1.0);
-	if(stato==1)
-	{
-		tmp=raggio;
-		raggio=lato;
-		 lato=tmp;
+	if (stato == 1) {
+		tmp = raggio;
+		raggio = lato;
+		lato = tmp;
 	}
-
 
 	//glBindTexture(GL_TEXTURE_2D, textures[Wall]);
 	drawBox(lato, GL_QUADS);
 	glutSolidSphere(raggio, 8.0, 8.0);
 	glPopMatrix();
-
 
 }
 
@@ -114,10 +110,9 @@ void displayWall() {
 	for (int i = 0; i < width; i++) {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
-			if (labyrint[i][j].value == '1')
-			 {
+			if (labyrint[i][j].value == '1') {
 				drawBox(5, GL_QUADS);
-			 }
+			}
 			if (labyrint[i][j].value == 'e') {
 				displayExit();
 			}
