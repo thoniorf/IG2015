@@ -28,7 +28,7 @@ static float exitangle=0.0;
 
 static float lato=1.0;//lato del cubo
 static float raggio=0.2;//raggio della sfera
-
+static int ai,aj;
 static int stato=0;//stato del gioco
 
 

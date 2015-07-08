@@ -20,9 +20,8 @@ GLdouble pi = 3.14159;
 static time_t startTime;
 static time_t currentTime;
 static double diffTime;
-static double maxTime = 15; //minutes
-static GLfloat  lightp[3];
-static GLfloat  spotDir[3];
+static double maxTime = 5; //minutes
+static time_t attackTime;
 struct player {
 	int attack;
 	GLdouble angle;
@@ -77,13 +76,13 @@ void init(void) {
 	glFogf(GL_FOG_DENSITY, 0.20f);
 	// set and enable lights
 	glEnable(GL_LIGHTING);
-	GLfloat ambientLight[] = {0.3f, 0.3f, 0.3f, 0.0f };
+	GLfloat ambientLight[] = { 0.3f, 0.3f, 0.3f, 0.0f };
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
-	GLfloat diffuseLight[] = {0.5f, 0.5f, 0.5f, 0.0f };
+	GLfloat diffuseLight[] = { 0.5f, 0.5f, 0.5f, 0.0f };
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
-	GLfloat lightPos[] = {12.5*5, 12.5*5, 12.5*5, 2.0f };
-	glLightfv(GL_LIGHT0,GL_POSITION,lightPos);
+	GLfloat lightPos[] = { 12.5 * 5, 12.5 * 5, 12.5 * 5, 2.0f };
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 	glEnable(GL_LIGHT0);
 	// set and enable texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -112,15 +111,11 @@ void init(void) {
 
 void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glColor4f(1.0,1.0,1.0,1.0);
+	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt(player.posx, player.posy, 1.5, player.posx + player.posfx,
 			player.posy + player.posfy, 1.5, 0.0, 0.0, 1.0);
-	if(player.attack == 1) {
-		glLightfv(GL_LIGHT0,GL_POSITION,lightp);
-		glLightfv(GL_LIGHT0,GL_SPOT_DIRECTION,spotDir);
-	}
 	glPushMatrix();
 	displayFloor();
 	displayRoof();
@@ -140,116 +135,109 @@ void reshape(int w, int h) {
 
 }
 
-bool enemycollision(double x, double y)
-{
-	if(enemies[(int)y][(int)x] != -1) {
-			return true;
+bool enemycollision(double x, double y) {
+	if (enemies[(int) y][(int) x] != -1) {
+		return true;
 	}
 	return false;
 
 }
 bool notcollisioni(double x, double y) {
-	if ((labyrint[(int) y][(int) x].value) == '0' || (labyrint[(int) y][(int) x].value) == 'p' ) {
+	if ((labyrint[(int) y][(int) x].value) == '0'
+			|| (labyrint[(int) y][(int) x].value) == 'p') {
 		return true;
 	}
 
 	return false;
 }
-void attack(){
+void attack() {
 	player.attack = 1;
-	int ex = (int)((player.posx + player.posfx) / 5 + player.speed * cos((player.angle * pi) / 180));
-	int ey = (int)((player.posy + player.posfy) / 5 + player.speed * sin((player.angle * pi) / 180));
-
-	if(enemies[ey][ex] != -1)
-	{
-		enemy[enemies[ey][ex]].alive = 0;
-	}
-	lightp[0] = (player.posx + player.posfx) / 5 + player.speed * cos((player.angle * pi) / 180);
-	lightp[1] = (player.posy + player.posfy) / 5 + player.speed * sin((player.angle * pi) / 180);
-	lightp[2] = 0.5;
-	spotDir[0] = cos((player.angle * pi) / 180);
-	spotDir[1] = sin((player.angle * pi) / 180);
-	spotDir[2] = 0.0;
-
+	time(&attackTime);
+	ai = (player.posy + player.posfy) / 5
+			+ player.speed * sin((player.angle * pi) / 180);
+	aj = (player.posx + player.posfx) / 5
+			+ player.speed * cos((player.angle * pi) / 180);
+	glutPostRedisplay();
 }
 void keyboard(unsigned char key, int x, int y) {
 
-	switch (key) {
-	case 'a':
+	if (key == 'a') {
 		player.angle += 2.0;
 		player.posfx = cos((player.angle * pi) / 180);
 		player.posfy = sin((player.angle * pi) / 180);
-		break;
-	case 'd':
+	}
+	if (key == 'd') {
 		player.angle -= 2.0;
 		player.posfx = cos((player.angle * pi) / 180);
 		player.posfy = sin((player.angle * pi) / 180);
-		break;
-	case 'w':
+	}
+	if (key == 'w') {
 		vittoria_sfera(
 				(player.posx + player.posfx) / 5
 						+ player.speed * cos((player.angle * pi) / 180),
 				(player.posy + player.posfy) / 5
 						+ player.speed * sin((player.angle * pi) / 180));
-	if(enemycollision(
-			(player.posx + player.posfx) / 5
-					+ player.speed * cos((player.angle * pi) / 180),
-			(player.posy + player.posfy) / 5
-					+ player.speed * sin((player.angle * pi) / 180)))
-		stato = 2;
-	if (!notcollisioni(
+		if (enemycollision(
 				(player.posx + player.posfx) / 5
 						+ player.speed * cos((player.angle * pi) / 180),
 				(player.posy + player.posfy) / 5
 						+ player.speed * sin((player.angle * pi) / 180)))
-			break;
+			stato = 2;
+		if (notcollisioni(
+				(player.posx + player.posfx) / 5
+						+ player.speed * cos((player.angle * pi) / 180),
+				(player.posy + player.posfy) / 5
+						+ player.speed * sin((player.angle * pi) / 180)))
+		{
 		player.posx = player.posx
 				+ player.speed * cos((player.angle * pi) / 180);
 		player.posy = player.posy
 				+ player.speed * sin((player.angle * pi) / 180);
-		break;
-	case 's':
+		}
+	}
+	if (key == 's') {
 		vittoria_sfera(
 				(player.posx - player.posfx) / 5
 						- (player.speed - 0.1) * cos((player.angle * pi) / 180),
 				(player.posy - player.posfy) / 5
 						- (player.speed - 0.1)
 								* sin((player.angle * pi) / 180));
-		if (!notcollisioni(
+		if (notcollisioni(
 				(player.posx - player.posfx) / 5
 						- (player.speed - 0.1) * cos((player.angle * pi) / 180),
 				(player.posy - player.posfy) / 5
 						- (player.speed - 0.1)
 								* sin((player.angle * pi) / 180)))
-			break;
+		{
 		player.posx = player.posx
 				- (player.speed - 0.1) * cos((player.angle * pi) / 180); // as for 'w'
 		player.posy = player.posy
 				- (player.speed - 0.1) * sin((player.angle * pi) / 180);
-		break;
-	case 'f':
-		attack();
-			break;
-	case 27:
-		exit(0);
-		break;
-	default:
-		break;
+		}
 	}
-	player.attack = 0;
+	if (key == 'f') {
+		attack();
+	}
+	if (key == 27) {
+		exit(0);
+	}
 	glutPostRedisplay();
 }
 void idle() {
 	time(&currentTime);
 	diffTime = difftime(currentTime, startTime);
 	movement();
-	if(stato == 1)
-	{
+	if (difftime(currentTime, attackTime) >= 2 && player.attack == 1) {
+		player.attack == 0;
+		ai = -1;
+		aj = -1;
+		glutPostRedisplay();
+	}
+	if (stato == 1) {
 		glutKeyboardFunc(NULL);
 		printf("You Win");
 	}
-	if(stato == 2)
-	{
+	if (stato == 2) {
 		printf("Game Over");
 		exit(0);
 	}
@@ -276,6 +264,6 @@ int main(int argc, char** argv) {
 	glutTimerFunc(1, timer, 5);
 	glutIdleFunc(idle);
 	glutMainLoop();
-	glDeleteTextures(N_Texture,textures);
+	glDeleteTextures(N_Texture, textures);
 	return 0;
 }

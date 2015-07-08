@@ -15,6 +15,8 @@ void initWall(int i, char buf[width + 1]) {
 
 }
 void initFloor() {
+	ai = -1;
+	aj = -1;
 	int x = 2.5, y = 2.5;
 	for (int i = 0; i < width; i++) {
 		y = 2.5;
@@ -51,6 +53,7 @@ void vittoria_sfera(double x, double y) {
 }
 
 void displayExit() {
+	glColor4f(1.,1.,1.,1.);
 	double tmp;
 	//if per far girare il cubo (se supera i 360 gradi,torna a 0, altrimenti si incrementa di 25gradi)
 	exitangle = (exitangle >= 360) ? 0 : exitangle + 5;
@@ -70,6 +73,7 @@ void displayExit() {
 }
 
 void displayWall() {
+	glColor4f(1.,1.,1.,1.);
 	glBindTexture(GL_TEXTURE_2D, textures[Wall]);
 	glTranslatef(2.5, 2.5, 0.0);
 	glPushMatrix();
@@ -77,7 +81,7 @@ void displayWall() {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
 			if (labyrint[i][j].value == '1') {
-				//drawBox(5, GL_QUADS);
+				drawBox(5, GL_QUADS);
 			}
 			if (labyrint[i][j].value == 'e') {
 				displayExit();
@@ -92,11 +96,14 @@ void displayWall() {
 }
 
 void displayFloor() {
+	glColor4f(1.,1.,1.,1.);
 	glBindTexture(GL_TEXTURE_2D, textures[Floor]);
 	glPushMatrix();
 	for (int i = 0; i < width; i++) {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
+			if(i == ai && j == aj)
+				glColor4f(1.0,0.0,0.0,1);
 			glBegin(GL_QUADS);
 			glNormal3f(0.0,0.0,1.0);
 			glTexCoord2f(0.0, 0.0);
@@ -118,6 +125,7 @@ void displayFloor() {
 }
 
 void displayRoof() {
+	glColor4f(1.,1.,1.,1.);
 	glBindTexture(GL_TEXTURE_2D, textures[Roof]);
 	glPushMatrix();
 	glTranslatef(0.0, 0.0, 2.5);

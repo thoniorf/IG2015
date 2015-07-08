@@ -13,8 +13,8 @@ void initEnemy() {
 		lj = rand()%23+1;
 		enemy[i].alive = 1;
 		enemy[i].angle = 0;
-		enemy[i].speed = 0.2;
-		enemy[i].step = 200;
+		enemy[i].speed = 0.1;
+		enemy[i].step = 100;
 		enemy[i].currentstep = 0;
 		setEnemyCords(labyrint[li][lj].x, labyrint[li][lj].y, i);
 		enemies[li][lj] = i;
@@ -27,7 +27,7 @@ void setEnemyCords(GLdouble x, GLdouble y, int i) {
 }
 
 void displayEnemy() {
-	glColor4f(1.0,1.0,1.0,1);
+	glColor4f(1.0,1.0,1.0,0.60);
 	for (int i = 0; i < 6; i++) {
 		if (enemy[i].alive == 1) {
 			glPushMatrix();
@@ -36,7 +36,6 @@ void displayEnemy() {
 			glPopMatrix();
 		}
 	}
-	glColor4f(1.,1.,1.,1.);
 }
 
 void movement() {
