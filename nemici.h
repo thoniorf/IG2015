@@ -4,23 +4,21 @@
 #include "pavimento.h"
 
 struct enemy {
+	int alive;
+	int step;
+	int currentstep;
 	GLdouble angle;
 	GLdouble speed;
 	GLdouble posx;
 	GLdouble posy;
-	GLdouble posfx;
-	GLdouble posfy;
-} enemy;
+}enemy[5];
 
-static int matrix[width][height];
+static int enemies[width][height];
 
 void iniz();
-
-GLdouble xavanti();
-GLdouble yavanti();
-
-GLdouble xindietro();
-GLdouble yindietro();
+void ranAngle();
+void setEnemyCords(GLdouble x,GLdouble y,int i);
+void displayEnemy();
 
 void movement();
 
