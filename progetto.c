@@ -6,7 +6,6 @@
  *  Modifier: Antonio 20/giu/2015
  */
 
-// I fantasmi dovranno lampeggiare !
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <math.h>
@@ -17,11 +16,9 @@
 #include "nemici.h"
 #include "ObjLoader.h"
 
-static GLdouble pi = 3.14159;
+GLdouble pi = 3.14159;
 static time_t startTime;
 static time_t currentTime;
-static time_t lastFrame;
-static double diffFrame;
 static double diffTime;
 static double maxTime = 15; //minutes
 
@@ -75,16 +72,13 @@ void init(void) {
 	// set and enable lights
 	glEnable(GL_LIGHTING);
 	GLfloat ambientLight[] = { 0.1f, 0.1f, 0.1f, 0.2f };
-	GLfloat lightPos[] = { 200.f, 200.0f, 200.0f, 1.0f };
+	GLfloat lightPos[] = { 12.5*5, 12.5*5, 12.5*5, 1.0f };
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambientLight);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 	glEnable(GL_LIGHT0);
 	// set and enable texture
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glEnable(GL_TEXTURE_2D);
-
-	//initObj
-	//initObj();
 
 	// init Maze Wall
 	freadlab();
@@ -99,10 +93,19 @@ void init(void) {
 	spawn();
 
 	// init enemy
-	iniz();
+	initEnemy();
+	for(int i = 0; i < 25; i++)
+	{
+		for(int j = 0; j < 25; j++)
+		{
+			printf("%i ",enemies[i][j]);
+		}
+		printf("\n");
+
+	}
+	printf("\n\n");
 	//start game timer
 	time(&startTime);
-	time(&lastFrame);
 }
 
 void display(void) {
@@ -118,7 +121,6 @@ void display(void) {
 	displayRoof();
 	displayWall();
 	displayEnemy();
-	//displayObj(0.0);
 	glPopMatrix();
 
 	glutSwapBuffers();
@@ -126,20 +128,26 @@ void display(void) {
 
 void reshape(int w, int h) {
 	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
-
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0, (GLfloat) w / (GLfloat) h, 1.0, 500.0);
 
 }
 
-bool notcollisioni(double x, double y) {
+bool enemycollision(double x, double y)
+{
+	if(enemies[(int)y][(int)x] != -1) {
+			return true;
+	}
+	return false;
 
+}
+bool notcollisioni(double x, double y) {
 	if ((labyrint[(int) y][(int) x].value) == '0') {
 		return true;
-	} else
+	}
 
-		return false;
+	return true;
 }
 
 void keyboard(unsigned char key, int x, int y) {
@@ -161,6 +169,12 @@ void keyboard(unsigned char key, int x, int y) {
 						+ player.speed * cos((player.angle * pi) / 180),
 				(player.posy + player.posfy) / 5
 						+ player.speed * sin((player.angle * pi) / 180));
+	if(enemycollision(
+			(player.posx + player.posfx) / 5
+					+ player.speed * cos((player.angle * pi) / 180),
+			(player.posy + player.posfy) / 5
+					+ player.speed * sin((player.angle * pi) / 180)))
+		stato = 2;
 	if (!notcollisioni(
 				(player.posx + player.posfx) / 5
 						+ player.speed * cos((player.angle * pi) / 180),
@@ -168,9 +182,9 @@ void keyboard(unsigned char key, int x, int y) {
 						+ player.speed * sin((player.angle * pi) / 180)))
 			break;
 		player.posx = player.posx
-				+ player.speed * cos((player.angle * pi) / 180); // speed * cos -> change player walk speed
+				+ player.speed * cos((player.angle * pi) / 180);
 		player.posy = player.posy
-				+ player.speed * sin((player.angle * pi) / 180); // the same as above with sin
+				+ player.speed * sin((player.angle * pi) / 180);
 		break;
 	case 's':
 
@@ -195,14 +209,19 @@ void keyboard(unsigned char key, int x, int y) {
 	glutPostRedisplay();
 }
 void idle() {
-
 	time(&currentTime);
 	diffTime = difftime(currentTime, startTime);
-	diffFrame = difftime(currentTime, lastFrame);
-
-		movement();
-
-
+	movement();
+	if(stato == 1)
+	{
+		printf("You Win");
+		exit(0);
+	}
+	if(stato == 2)
+	{
+		printf("Game Over");
+		exit(0);
+	}
 	if (diffTime >= maxTime * 60) {
 		printf("Time Over");
 		exit(0);
@@ -225,7 +244,6 @@ int main(int argc, char** argv) {
 	glutKeyboardFunc(keyboard);
 	glutTimerFunc(1, timer, 5);
 	glutIdleFunc(idle);
-
 	glutMainLoop();
 
 	return 0;

@@ -1,6 +1,8 @@
 #ifndef NEMICI_H_
 #define NEMICI_H_
 
+#include <math.h>
+#define _USE_MATH_DEFINES
 #include "pavimento.h"
 
 struct enemy {
@@ -13,10 +15,9 @@ struct enemy {
 	GLdouble posy;
 }enemy[5];
 
-static int enemies[width][height];
+int enemies[width][height];
 
-void iniz();
-void ranAngle();
+void initEnemy();
 void setEnemyCords(GLdouble x,GLdouble y,int i);
 void displayEnemy();
 

@@ -64,7 +64,6 @@ void displayExit() {
 		raggio = lato;
 		lato = tmp;
 	}
-
 	//glBindTexture(GL_TEXTURE_2D, textures[Wall]);
 	drawBox(lato, GL_QUADS);
 	glutSolidSphere(raggio, 8.0, 8.0);
@@ -89,7 +88,6 @@ void displayWall() {
 		}
 		glPopMatrix();
 		glTranslatef(0.0, 5., 0.0);
-
 	}
 	glPopMatrix();
 	glFlush();
@@ -102,6 +100,7 @@ void displayFloor() {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
 			glBegin(GL_QUADS);
+			glNormal3f(0.0,0.0,1.0);
 			glTexCoord2f(0.0, 0.0);
 			glVertex2f(0.0, 0.0);
 			glTexCoord2f(1.0, 0.0);
@@ -122,15 +121,13 @@ void displayFloor() {
 
 void displayRoof() {
 	glBindTexture(GL_TEXTURE_2D, textures[Roof]);
-	//glColor3f(1.0, 0.28, 0.28);
 	glPushMatrix();
 	glTranslatef(0.0, 0.0, 2.5);
 	for (int i = 0; i < width; i++) {
-
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
-
 			glBegin(GL_QUADS);
+			glNormal3f(0.0,0.0,-1.0);
 			glTexCoord2f(0.0, 0.0);
 			glVertex2f(0.0, 0.0);
 			glTexCoord2f(1.0, 0.0);
@@ -145,7 +142,6 @@ void displayRoof() {
 		glPopMatrix();
 		glTranslatef(0.0, 5., 0.0);
 	}
-
 	glPopMatrix();
 	glFlush();
 }
