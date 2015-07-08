@@ -54,8 +54,8 @@ void spawn() {
 			y = rand() % 24 + 1;
 	}
 	labyrint[x][y].value = 'p';
-	player.posx = labyrint[23][22].x;
-	player.posy = labyrint[23][22].y;
+	player.posx = labyrint[x][y].x;
+	player.posy = labyrint[x][y].y;
 }
 void init(ww) {
 
@@ -87,8 +87,8 @@ void init(ww) {
 	glLightfv(GL_LIGHT0,GL_POSITION,lightPos);
 	glEnable(GL_LIGHT0);
 	// set and enable texture
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glEnable(GL_TEXTURE_2D);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 	// init Maze Wall
 	freadlab();
@@ -233,7 +233,7 @@ void keyPressed(){
 	if(keys['r'] == 1) init();
 	if(keys[27] == 1) exit(0);
 
-	glutPostRedisplay();
+
 }
 void win(){
 	keyPressed();

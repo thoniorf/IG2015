@@ -1,5 +1,6 @@
 #include "nemici.h"
 static GLdouble pi = 3.14159;
+static GLfloat enemy_color[4] = {1.0,1.0,1.0,1.0};
 void initEnemy() {
 	for (int i = 0; i < width; i++) {
 		for (int j = 0; j < height; j++) {
@@ -27,7 +28,7 @@ void setEnemyCords(GLdouble x, GLdouble y, int i) {
 }
 
 void displayEnemy() {
-	glColor4f(1.0,1.0,1.0,0.60);
+	glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, &enemy_color[0]);
 	for (int i = 0; i < 6; i++) {
 		if (enemy[i].alive == 1) {
 			glPushMatrix();
