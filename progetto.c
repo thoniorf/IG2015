@@ -20,7 +20,7 @@ GLdouble pi = 3.14159;
 static time_t startTime;
 static time_t currentTime;
 static double diffTime;
-static double maxTime = 5; //minutes
+static double maxTime = 1; //minutes
 static time_t attackTime;
 static GLfloat fogd;
 struct player {
@@ -74,6 +74,7 @@ void init(void) {
 	float FogCol[3] = { 0.35f, 0.35f, 0.35f };
 	glFogfv(GL_FOG_COLOR, FogCol);
 	glFogi(GL_FOG_MODE, GL_EXP);
+	glFogf(GL_FOG_DENSITY,0.006);
 	// set and enable lights
 	glEnable(GL_LIGHTING);
 	GLfloat ambientLight[] = {0.3f, 0.3f, 0.3f, 0.0f };
@@ -113,7 +114,7 @@ void display(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor4f(1.0,1.0,1.0,1.0);
 	glMatrixMode(GL_MODELVIEW);
-	glFogf(GL_FOG_DENSITY, fogd);
+	glFogf(GL_FOG_DENSITY,fogd);
 	glLoadIdentity();
 	gluLookAt(player.posx, player.posy, 1.5, player.posx + player.posfx,
 			player.posy + player.posfy, 1.5, 0.0, 0.0, 1.0);
@@ -236,9 +237,9 @@ void keyboard(unsigned char key, int x, int y) {
 void idle() {
 	time(&currentTime);
 	diffTime = difftime(currentTime, startTime);
-	fogd = 0.006*diffTime;
+	fogd = 0.006*diffTime*sin((diffTime * pi) / 180);
 	movement();
-	if(difftime(currentTime, attackTime)>=2.0 && player.attack == 1)
+	if(difftime(currentTime, attackTime)>=1.25 && player.attack == 1)
 	{
 		player.attack = 0;
 		ai= -1;
