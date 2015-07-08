@@ -93,6 +93,9 @@ void init(void) {
 	// init Floor cords
 	initFloor();
 
+	// init obj
+	//initObj();
+
 	// load wall texture
 	initTexture();
 
@@ -121,6 +124,7 @@ void display(void) {
 	displayRoof();
 	displayWall();
 	displayEnemy();
+	displayObj(0.0);
 	glPopMatrix();
 
 	glutSwapBuffers();

@@ -71,8 +71,8 @@ void displayExit() {
 
 void displayWall() {
 	glBindTexture(GL_TEXTURE_2D, textures[Wall]);
-	glTranslatef(2.5, 2.5, 0.0);
 	glPushMatrix();
+	glTranslatef(2.5, 2.5, 0.0);
 	for (int i = 0; i < width; i++) {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
