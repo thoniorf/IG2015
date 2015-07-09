@@ -15,7 +15,7 @@
 #include "LabReader.h"
 #include "nemici.h"
 #include "ObjLoader.h"
-
+void idle();
 GLdouble pi = 3.14159;
 static time_t startTime;
 static time_t currentTime;
@@ -57,8 +57,8 @@ void spawn() {
 	player.posx = labyrint[x][y].x;
 	player.posy = labyrint[x][y].y;
 }
-void init(ww) {
-
+void init() {
+	stato = 0;
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_BLEND);
@@ -174,6 +174,9 @@ void keyUp(unsigned char key, int x, int y){
 void keyDown(unsigned char key, int x, int y) {
 	keys[key] = 1;
 }
+void win(){
+	keyPressed();
+}
 
 void keyPressed(){
 	if(keys['a'] == 1){
@@ -192,7 +195,7 @@ void keyPressed(){
 								+ player.speed * cos((player.angle * pi) / 180),
 						(player.posy + player.posfy) / 5
 								+ player.speed * sin((player.angle * pi) / 180)))
-				stato = 1;
+				glutIdleFunc(win);
 			if(enemycollision(
 					(player.posx + player.posfx) / 5
 							+ player.speed * cos((player.angle * pi) / 180),
@@ -211,12 +214,12 @@ void keyPressed(){
 			}
 		}
 	if(keys['s'] == 1){
-		vittoria_sfera(
+		if(vittoria_sfera(
 						(player.posx - player.posfx) / 5
 								- (player.speed - 0.1) * cos((player.angle * pi) / 180),
 						(player.posy - player.posfy) / 5
 								- (player.speed - 0.1)
-										* sin((player.angle * pi) / 180));
+										* sin((player.angle * pi) / 180))) glutIdleFunc(win);
 				if (notcollisioni(
 						(player.posx - player.posfx) / 5
 								- (player.speed - 0.1) * cos((player.angle * pi) / 180),
@@ -230,13 +233,17 @@ void keyPressed(){
 				}
 	}
 	if(keys['f'] == 1) attack();
-	if(keys['r'] == 1) init();
+	if(keys['r'] == 1) {
+		glutDisplayFunc(display);
+		glutReshapeFunc(reshape);
+		glutKeyboardFunc(keyDown);
+		glutKeyboardUpFunc(keyUp);
+		glutIdleFunc(idle);
+		init();
+	}
 	if(keys[27] == 1) exit(0);
 
 
-}
-void win(){
-	keyPressed();
 }
 void idle() {
 	keyPressed();
@@ -253,7 +260,6 @@ void idle() {
 	if(stato == 2)
 	{
 		printf("Game Over");
-		glutKeyboardFunc(NULL);
 		glutIdleFunc(win);
 	}
 	if (diffTime >= maxTime * 60) {

@@ -49,10 +49,11 @@ void initTexture() {
 bool vittoria_sfera(double x, double y) {
 	if ((labyrint[(int) y][(int) x].value) == 'e') {
 		stato = 1;
-		glutKeyboardFunc(NULL);
 				printf("You Win");
 				glutIdleFunc(NULL);
 				glutPostRedisplay();
+				exit(0);
+		return true;
 	}
 
 	return false;
@@ -73,6 +74,7 @@ void displayExit() {
 	}
 	//glBindTexture(GL_TEXTURE_2D, textures[Wall]);
 	drawBox(lato, GL_QUADS);
+	glBindTexture(GL_TEXTURE_2D, textures[Win]);
 	glutSolidSphere(raggio, 8.0, 8.0);
 	glPopMatrix();
 
@@ -80,16 +82,17 @@ void displayExit() {
 
 void displayWall() {
 	glColor4f(1.,1.,1.,1.);
-	glBindTexture(GL_TEXTURE_2D, textures[Wall]);
 	glTranslatef(2.5, 2.5, 0.0);
 	glPushMatrix();
 	for (int i = 0; i < width; i++) {
 		glPushMatrix();
 		for (int j = 0; j < height; j++) {
 			if (labyrint[i][j].value == '1') {
+				glBindTexture(GL_TEXTURE_2D, textures[Wall]);
 				drawBox(5, GL_QUADS);
 			}
 			if (labyrint[i][j].value == 'e') {
+				//glBindTexture(GL_TEXTURE_2D, textures[Gate]);
 				displayExit();
 			}
 			glTranslatef(5., 0.0, 0.0);

@@ -18,13 +18,15 @@
 #define width 25				// Maze columns
 #define height 25				// Maze rows
 
-#define N_Texture 3				// Texture number
+#define N_Texture 4				// Texture number
 #define Wall 0					// Wall texture index
 #define Floor 1					// Floor
 #define Roof 2					// Roof
+#define Gate 3					// Gate
+#define Win 4					//Win
 
 static GLuint textures[N_Texture];
-static const char *uv_file_name[N_Texture] = {"./assets/Wall.tga","./assets/Floor.tga","./assets/Roof.tga"};
+static const char *uv_file_name[N_Texture] = {"./assets/Wall.tga","./assets/Floor.tga","./assets/Roof.tga","./assets/Gate.tga","./assets/Stone.tga"};
 
 static float exitangle=0.0;
 
